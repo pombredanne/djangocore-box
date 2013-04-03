@@ -7,7 +7,7 @@ Python and every supported database backend, as well as for the GIS features
 (aka GeoDjango).
 
 The versions of Python that are installed are: 2.4.6, 2.5.6, 2.6.5, 2.7.3
-(default), and 3.2.3. The installed database backends are: SQLite, Spatialite,
+(default), and 3.3. The installed database backends are: SQLite, Spatialite,
 MySQL, PostgreSQL and PostGIS. Oracle is coming soon.
 
 Preparation
@@ -58,8 +58,8 @@ Then, either:
 * If you have not already downloaded the box file separately, then run the
   following commands to boot the machine.
 
-      (host) $ cd djangocore-box
-      (host) $ vagrant up
+        (host) $ cd djangocore-box
+        (host) $ vagrant up
 
   This will automatically download the VM, which is about _1GB_ in size (be
   warned if you have a low bandwitdh Internet connection) and then boot it up.
@@ -71,9 +71,9 @@ Then, either:
   someone gave it to you via a flash drive), then run the following command in
   order to import the box into vagrant and boot up the VM:
 
-      (host) $ vagrant box add djangocore-box-1.0 path/to/your/local/copy/of/djangocore-box-1.0.box
-      (host) $ cd djangocore-box
-      (host) $ vagrant up
+        (host) $ vagrant box add djangocore-box-1.1 path/to/your/local/copy/of/djangocore-box-1.1.box
+        (host) $ cd djangocore-box
+        (host) $ vagrant up
 
   `vagrant box add` will copy the box file to `~/.vagrant.d/boxes`, so you may
   delete the file you've dowloaded if you'd like to save some space on your
@@ -89,7 +89,7 @@ Once the VM is up and running, type the following command to SSH into the VM
     (host) $ vagrant ssh
 
 Once inside the VM, you can run the tests by typing any of the pre-defined
-aliases: `runtests{2.4,2.5,2.6,2.7,3.2}-{sqlite,mysql,postgresql,spatialite,postgis}`.
+aliases: `runtests{2.4,2.5,2.6,2.7,3.3}-{sqlite,mysql,postgresql,spatialite,postgis}`.
 For example:
 
     (vm) $ runtests2.6-mysql
@@ -126,12 +126,12 @@ you can edit Django's code using your favorite editor/IDE from your host
 machine and run the tests from inside the VM.
 
 The various versions of python are installed in the `/opt` folder. The
-virtualenvs are named `py{2.4,2.5,2.6,2.7,3.2}` and are installed under
+virtualenvs are named `py{2.4,2.5,2.6,2.7,3.3}` and are installed under
 `/home/vagrant/.virtualenvs/`.
 
 `virtualenvwrapper` is also installed so you may run, for example:
 
-    (vm) $ workon py3.2
+    (vm) $ workon py3.3
 
 You should be able to push commits to your fork of django on github directly
 from inside the VM, as the SSH and git configuration files inside the VM are
@@ -141,9 +141,23 @@ may push those commits from the host machine too.
 The test settings are available in `/djangocore-box/test_settings/test_*.py`.
 These files are available in every virtualenv via symlinks.
 
-The VM is currently based on a lucid32 (Ubuntu 10.04.4 LTS) distribution. There
-are plans to switch to a more recent distribution, namely precise32 (Ubuntu
-12.04 LTS).
+Firefox is pre-installed so that Django's selenium tests can be run in headless
+mode in a virtual display (with the id `:99`). For example, you may run a
+specific test like so:
+
+    (vm) $ runtests2.6-sqlite admin_inlines.SeleniumFirefoxTests --selenium
+
+The VM is based on a Ubuntu 12.04 LTS 64 bits distribution.
+
+Building the documentation
+--------------------------
+
+To build the documentation, simply activate one of the virtualenvs and run the
+Sphinx build command:
+
+    workon py2.7
+    cd /django/docs
+    make html
 
 Vagrant command tips
 --------------------
@@ -184,7 +198,6 @@ Todo
 ----
 
 - Install the Oracle backend.
-- Use a more recent base box (e.g. Ubuntu 12.04 LTS).
 
 Credits
 -------
